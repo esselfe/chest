@@ -1,5 +1,5 @@
 
-CFLAGS = -std=c11 -Wall -Werror -O2 -D_DEFAULT_SOURCE
+CFLAGS = -std=c11 -Wall -O2 -D_DEFAULT_SOURCE
 LDFLAGS = -lcrypto
 OBJDIR = obj
 OBJS = $(OBJDIR)/decrypt.o $(OBJDIR)/encrypt.o $(OBJDIR)/chest.o

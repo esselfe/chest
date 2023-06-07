@@ -33,12 +33,12 @@ void Encrypt(char *src, char *dst) {
 	SHA512_Init(&ctx);
 	SHA512_Update(&ctx, pw, strlen(pw));
 	SHA512_Final(sum, &ctx);
-	fputs((char *)sum, fw);
+	//fputs((char *)sum, fw);
 
 	char *buf = malloc(4096);
 	char *buf2 = malloc(4096);
 	size_t sz;
-	int i;
+	int i, cnt = 0;
 	memset(buf, 0, 4096);
 	while (1) {
 		sz = fread(buf, 1, 4096, fr);
@@ -46,7 +46,11 @@ void Encrypt(char *src, char *dst) {
 			break;
 
 		for (i=0; i<sz; i++) {
-			buf2[i] = buf[sz-1-i];
+			buf2[i] = buf[i] - sum[cnt];
+
+			++cnt;
+			if (cnt >= SHA512_DIGEST_LENGTH)
+				cnt = 0;
 		}
 
 		fwrite(buf2, 1, sz, fw);

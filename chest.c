@@ -7,7 +7,7 @@
 
 #include "chest.h"
 
-static const char *chest_version = "0.0.1";
+static const char *chest_version = "0.0.2";
 
 static struct option const long_options[] = {
 	{"help", no_argument, NULL, 'h'},
