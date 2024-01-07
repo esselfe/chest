@@ -29,11 +29,12 @@ void Encrypt(char *src, char *dst) {
 	fgets(pw, 4096, stdin);
 	pw[strlen(pw)-1] = '\0';
 
-	SHA512_CTX ctx;
-	SHA512_Init(&ctx);
-	SHA512_Update(&ctx, pw, strlen(pw));
-	SHA512_Final(sum, &ctx);
-	//fputs((char *)sum, fw);
+	//SHA512_CTX ctx;
+	//SHA512_Init(&ctx);
+	//SHA512_Update(&ctx, pw, strlen(pw));
+	//SHA512_Final(sum, &ctx);
+
+	SHA512((unsigned char *)pw, strlen(pw), sum);
 
 	char *buf = malloc(4096);
 	char *buf2 = malloc(4096);

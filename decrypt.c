@@ -29,17 +29,12 @@ void Decrypt(char *src, char *dst) {
 	pw[strlen(pw)-1] = '\0';
 
 	unsigned char *sumpw = malloc(SHA512_DIGEST_LENGTH);
-	SHA512_CTX ctx;
-	SHA512_Init(&ctx);
-	SHA512_Update(&ctx, pw, strlen(pw));
-	SHA512_Final(sumpw, &ctx);
+	//SHA512_CTX ctx;
+	//SHA512_Init(&ctx);
+	//SHA512_Update(&ctx, pw, strlen(pw));
+	//SHA512_Final(sumpw, &ctx);
 
-	/*unsigned char *sum = malloc(SHA512_DIGEST_LENGTH);
-	fread(sum, 1, SHA512_DIGEST_LENGTH, fr);
-	if (strcmp((char *)sum, (char *)sumpw) != 0) {
-		printf("chest error: Wrong password\n");
-		return;
-	}*/
+	SHA512((unsigned char *)pw, strlen(pw), sumpw);
 
 	char *buf = malloc(4096);
 	char *buf2 = malloc(4096);
