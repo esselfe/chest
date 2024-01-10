@@ -56,7 +56,7 @@ void Decrypt(char *src, char *dst) {
 			buf2[i] = buf[i] + sumpw[cnt];
 
 			++cnt;
-			// Reset the hash index if the end hash been reached
+			// Reset the hash index if the end has been reached
 			if (cnt >= SHA512_DIGEST_LENGTH)
 				cnt = 0;
 		}
