@@ -1,13 +1,13 @@
 Updated: 240110
 
 The chest program can be used to encrypt and decrypt files using a password
-hash hopping algorithm. Note that the encrypted output maybe vulnerable to
+hash hopping algorithm. Note that the encrypted output may be vulnerable to
 hash database cracking due to its simplicity.
 
 Just give a filename as argument and it should detect, according to the
 presence of the .chest extension, whether to encrypt or decrypt.
 
-The password nor the hash are stored in the output file, the hash is
+Neither the password or the hash are stored in the output file, the hash is
 generated at runtime after the user has been asked for a password.
 
 Disclaimer: There is no warranty that the encrypted output file is not
