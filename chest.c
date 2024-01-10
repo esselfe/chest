@@ -21,6 +21,7 @@ void ChestHelp(void) {
 }
 
 int main(int argc, char **argv) {
+	// Parse some of the program options here
 	int c;
 	while (1) {
 		c = getopt_long( argc, argv, short_options, long_options, NULL);
@@ -38,11 +39,13 @@ int main(int argc, char **argv) {
 		}
 	}
 
+	// Must have at least 1 argument
 	if (argc < 2) {
 		ChestHelp();
 		exit(EINVAL);
 	}
 
+	// Chech whether to encrypt or decrypt according to the file extension
 	char *filename_s, *filename_d;
 	int len = strlen(argv[1]);
 	if (strcmp(argv[1]+strlen(argv[1])-6, ".chest") == 0) {
