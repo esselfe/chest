@@ -12,6 +12,7 @@ generated at runtime after the user has been asked for a password.
 
 Disclaimer: There is no warranty that the encrypted output file is not
 crackable! Normally you shouldn't store critical data with this encryption.
+See the LICENSE file for full disclosure.
 
 Enjoy!
 
