@@ -20,6 +20,17 @@ void ChestHelp(void) {
 	printf("Usage: chest { -h/--help | -V/--version } FILENAME\n");
 }
 
+void RemoveNewline(char *text) {
+	char *cp = text;
+	int len = strlen(text);
+	if (len < 1) return;
+	int cnt;
+	for (cnt = 0; cnt < len; cnt++, cp++) {
+		if (*cp == '\n')
+			*cp = '\0';
+	}
+}
+
 int main(int argc, char **argv) {
 	// Parse some of the program options here
 	int c;

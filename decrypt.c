@@ -5,6 +5,8 @@
 #include <errno.h>
 #include <openssl/sha.h>
 
+#include "chest.h"
+
 void Decrypt(char *src, char *dst) {
 	printf("src: %s\n", src);
 	printf("dst: %s\n", dst);
@@ -34,7 +36,7 @@ void Decrypt(char *src, char *dst) {
 	printf("Password: ");
 	fflush(stdout);
 	fgets(pw, 4096, stdin);
-	pw[strlen(pw)-1] = '\0'; // Remove newline ending
+	RemoveNewline(pw);
 
 	unsigned char *sumpw = malloc(SHA512_DIGEST_LENGTH);
 	if (sumpw == NULL) {

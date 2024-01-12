@@ -5,6 +5,8 @@
 #include <errno.h>
 #include <openssl/sha.h>
 
+#include "chest.h"
+
 void Encrypt(char *src, char *dst) {
 	printf("src: %s\n", src);
 	printf("dst: %s\n", dst);
@@ -33,7 +35,7 @@ void Encrypt(char *src, char *dst) {
 	memset(pw, 0, 4096);
 	printf("New password: ");
 	fgets(pw, 4096, stdin);
-	pw[strlen(pw)-1] = '\0'; // Remove newline ending
+	RemoveNewline(pw);
 
 	// Example of deprecated code (openssl 3.x)
 	//SHA512_CTX ctx;
