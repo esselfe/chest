@@ -51,8 +51,6 @@ void Decrypt(char *src, char *dst) {
 
 	// Compute the hash
 	SHA512((unsigned char *)pw, strlen(pw), sumpw);
-	
-	memset(pw, 0, 4096);
 	free(pw);
 
 	char *buf = malloc(4096);

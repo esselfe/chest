@@ -51,8 +51,6 @@ void Encrypt(char *src, char *dst) {
 	}
 	memset(sum, 0, SHA512_DIGEST_LENGTH);
 	SHA512((unsigned char *)pw, strlen(pw), sum);
-	
-	memset(pw, 0, 4096);
 	free(pw);
 
 	char *buf = malloc(4096);
