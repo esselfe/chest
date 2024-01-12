@@ -61,6 +61,7 @@ int main(int argc, char **argv) {
 		sprintf(filename_s, "%s", argv[1]);
 		filename_d = (char *)malloc(len-6);
 		if (filename_d == NULL) {
+			free(filename_s);
 			printf("chest error: malloc() returned NULL, exiting.\n");
 			return 1;
 		}
@@ -80,6 +81,7 @@ int main(int argc, char **argv) {
 		sprintf(filename_s, "%s", argv[1]);
 		filename_d = (char *)malloc(len+7);
 		if (filename_d == NULL) {
+			free(filename_s);
 			printf("chest error: malloc() returned NULL, exiting.\n");
 			return 1;
 		}
