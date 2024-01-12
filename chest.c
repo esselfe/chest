@@ -48,10 +48,15 @@ int main(int argc, char **argv) {
 	// Chech whether to encrypt or decrypt according to the file extension
 	char *filename_s, *filename_d;
 	int len = strlen(argv[1]);
-	if (strcmp(argv[1]+strlen(argv[1])-6, ".chest") == 0) {
-		filename_s = (char *)malloc(len);
+	if (len < 1) {
+		printf("chest error: filename length can't be zero! Cancelled.\n");
+		return ECANCELED;
+	}
+	if (len >= 7 && strcmp(argv[1]+strlen(argv[1])-6, ".chest") == 0) {
+		filename_s = (char *)malloc(len+1);
 		sprintf(filename_s, "%s", argv[1]);
-		filename_d = (char *)malloc(len-7);
+		filename_d = (char *)malloc(len-6);
+		memset(filename_d, 0, len-6);
 		int cnt;
 		for (cnt = 0; cnt <= len-7; cnt++) {
 			filename_d[cnt] = argv[1][cnt];
@@ -59,9 +64,9 @@ int main(int argc, char **argv) {
 		Decrypt(filename_s, filename_d);
 	}
 	else {
-		filename_s = (char *)malloc(len);
+		filename_s = (char *)malloc(len+1);
 		sprintf(filename_s, "%s", argv[1]);
-		filename_d = (char *)malloc(len+6);
+		filename_d = (char *)malloc(len+7);
 		sprintf(filename_d, "%s.chest", argv[1]);
 		Encrypt(filename_s, filename_d);
 	}
