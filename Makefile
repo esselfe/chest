@@ -23,7 +23,7 @@ $(OBJDIR)/chest.o: chest.c
 	gcc -c $(CFLAGS) chest.c -o $(OBJDIR)/chest.o
 
 $(PROGNAME): $(OBJS)
-	gcc $(CFLAGS) $(LDFLAGS) $(OBJS) -o $(PROGNAME)
+	gcc $(CFLAGS) $(OBJS) -o $(PROGNAME) $(LDFLAGS)
 
 clean:
 	@rm -rfv $(OBJDIR) $(PROGNAME) || true
