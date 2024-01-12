@@ -31,11 +31,9 @@ int main(int argc, char **argv) {
 		case 'h':
 			ChestHelp();
 			exit(0);
-			break;
 		case 'V':
 			printf("chest %s\n", chest_version);
 			exit(0);
-			break;
 		}
 	}
 
