@@ -25,6 +25,10 @@ void Decrypt(char *src, char *dst) {
 
 	// Ask for the password
 	char *pw = malloc(4096);
+	if (pw == NULL) {
+		printf("chest error: malloc() returned NULL, exiting.\n");
+		exit(1);
+	}
 	memset(pw, 0, 4096);
 	printf("Password: ");
 	fflush(stdout);
@@ -32,6 +36,10 @@ void Decrypt(char *src, char *dst) {
 	pw[strlen(pw)-1] = '\0'; // Remove newline ending
 
 	unsigned char *sumpw = malloc(SHA512_DIGEST_LENGTH);
+	if (sumpw == NULL) {
+		printf("chest error: malloc() returned NULL, exiting.\n");
+		exit(1);
+	}
 	// Example of deprecated code (openssl 3.x)
 	//SHA512_CTX ctx;
 	//SHA512_Init(&ctx);
@@ -42,7 +50,15 @@ void Decrypt(char *src, char *dst) {
 	SHA512((unsigned char *)pw, strlen(pw), sumpw);
 
 	char *buf = malloc(4096);
+	if (buf == NULL) {
+		printf("chest error: malloc() returned NULL, exiting.\n");
+		exit(1);
+	}
 	char *buf2 = malloc(4096);
+	if (buf2 == NULL) {
+		printf("chest error: malloc() returned NULL, exiting.\n");
+		exit(1);
+	}
 	size_t sz;
 	int i, cnt = 0;
 	memset(buf, 0, 4096);

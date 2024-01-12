@@ -25,6 +25,10 @@ void Encrypt(char *src, char *dst) {
 
 	// Ask for a password
 	char *pw = malloc(4096);
+	if (pw == NULL) {
+		printf("chest error: malloc() returned NULL, exiting.\n");
+		exit(1);
+	}
 	memset(pw, 0, 4096);
 	printf("New password: ");
 	fgets(pw, 4096, stdin);
@@ -38,11 +42,23 @@ void Encrypt(char *src, char *dst) {
 
 	// Compute the hash
 	unsigned char *sum = malloc(SHA512_DIGEST_LENGTH);
+	if (sum == NULL) {
+		printf("chest error: malloc() returned NULL, exiting.\n");
+		exit(1);
+	}
 	memset(sum, 0, SHA512_DIGEST_LENGTH);
 	SHA512((unsigned char *)pw, strlen(pw), sum);
 
 	char *buf = malloc(4096);
+	if (buf == NULL) {
+		printf("chest error: malloc() returned NULL, exiting.\n");
+		exit(1);
+	}
 	char *buf2 = malloc(4096);
+	if (buf2 == NULL) {
+		printf("chest error: malloc() returned NULL, exiting.\n");
+		exit(1);
+	}
 	size_t sz;
 	int i, cnt = 0;
 	memset(buf, 0, 4096);

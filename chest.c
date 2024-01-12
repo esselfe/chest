@@ -54,8 +54,16 @@ int main(int argc, char **argv) {
 	}
 	if (len >= 7 && strcmp(argv[1]+strlen(argv[1])-6, ".chest") == 0) {
 		filename_s = (char *)malloc(len+1);
+		if (filename_s == NULL) {
+			printf("chest error: malloc() returned NULL, exiting.\n");
+			return 1;
+		}
 		sprintf(filename_s, "%s", argv[1]);
 		filename_d = (char *)malloc(len-6);
+		if (filename_d == NULL) {
+			printf("chest error: malloc() returned NULL, exiting.\n");
+			return 1;
+		}
 		memset(filename_d, 0, len-6);
 		int cnt;
 		for (cnt = 0; cnt <= len-7; cnt++) {
@@ -65,8 +73,16 @@ int main(int argc, char **argv) {
 	}
 	else {
 		filename_s = (char *)malloc(len+1);
+		if (filename_s == NULL) {
+			printf("chest error: malloc() returned NULL, exiting.\n");
+			return 1;
+		}
 		sprintf(filename_s, "%s", argv[1]);
 		filename_d = (char *)malloc(len+7);
+		if (filename_d == NULL) {
+			printf("chest error: malloc() returned NULL, exiting.\n");
+			return 1;
+		}
 		sprintf(filename_d, "%s.chest", argv[1]);
 		Encrypt(filename_s, filename_d);
 	}
