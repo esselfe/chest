@@ -20,6 +20,7 @@ void Encrypt(char *src, char *dst) {
 	FILE *fw = fopen(dst, "w+");
 	if (fw == NULL) {
 		fprintf(stderr, "chest error: Cannot open %s: %s\n", dst, strerror(errno));
+		fclose(fr);
 		return;
 	}
 
