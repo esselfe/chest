@@ -43,6 +43,9 @@ int main(int argc, char **argv) {
 		case 'V':
 			printf("chest %s\n", chest_version);
 			exit(0);
+		default:
+			printf("chest warning: unknown option %d/'%c'\n", c, (char)c);
+			break;
 		}
 	}
 
