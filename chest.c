@@ -56,7 +56,8 @@ int main(int argc, char **argv) {
 	}
 
 	// Chech whether to encrypt or decrypt according to the file extension
-	char *filename_s, *filename_d;
+	char *filename_s;
+	char *filename_d;
 	int len = strlen(argv[1]);
 	if (len < 1) {
 		printf("chest error: filename length can't be zero! Cancelled.\n");
@@ -76,8 +77,7 @@ int main(int argc, char **argv) {
 			return 1;
 		}
 		memset(filename_d, 0, len-6);
-		int cnt;
-		for (cnt = 0; cnt <= len-7; cnt++) {
+		for (int cnt = 0; cnt <= len-7; cnt++) {
 			filename_d[cnt] = argv[1][cnt];
 		}
 		Decrypt(filename_s, filename_d);
