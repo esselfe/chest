@@ -63,15 +63,14 @@ void Encrypt(char *src, char *dst) {
 		printf("chest error: malloc() returned NULL, exiting.\n");
 		exit(1);
 	}
-	size_t sz;
-	int i, cnt = 0;
+	int cnt = 0;
 	memset(buf, 0, 4096);
 	while (1) { // Loop for the whole file content
-		sz = fread(buf, 1, 4096, fr);
+		size_t sz = fread(buf, 1, 4096, fr);
 		if (sz == 0)
 			break;
 
-		for (i = 0; i < sz; i++) {
+		for (int i = 0; i < sz; i++) {
 			// The actual encryption happens here
 			buf2[i] = buf[i] - sum[cnt];
 

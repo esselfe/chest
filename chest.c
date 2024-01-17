@@ -24,8 +24,7 @@ void RemoveNewline(char *text) {
 	char *cp = text;
 	int len = strlen(text);
 	if (len < 1) return;
-	int cnt;
-	for (cnt = 0; cnt < len; cnt++, cp++) {
+	for (int cnt = 0; cnt < len; cnt++, cp++) {
 		if (*cp == '\n')
 			*cp = '\0';
 	}
@@ -33,9 +32,8 @@ void RemoveNewline(char *text) {
 
 int main(int argc, char **argv) {
 	// Parse some of the program options here
-	int c;
 	while (1) {
-		c = getopt_long( argc, argv, short_options, long_options, NULL);
+		int c = getopt_long( argc, argv, short_options, long_options, NULL);
 		if (c == -1) break;
 
 		switch (c) {
