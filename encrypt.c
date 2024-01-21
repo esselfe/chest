@@ -12,14 +12,14 @@ void Encrypt(char *src, char *dst) {
 	printf("dst: %s\n", dst);
 
 	// Open input file
-	FILE *fr = fopen(src, "r");
+	FILE *fr = fopen(src, "rb");
 	if (fr == NULL) {
 		fprintf(stderr, "chest error: Cannot open %s: %s\n", src, strerror(errno));
 		return;
 	}
 
 	// Open output file
-	FILE *fw = fopen(dst, "w+");
+	FILE *fw = fopen(dst, "wb+");
 	if (fw == NULL) {
 		fprintf(stderr, "chest error: Cannot open %s: %s\n", dst, strerror(errno));
 		fclose(fr);
