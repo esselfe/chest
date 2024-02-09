@@ -14,5 +14,9 @@ Disclaimer: There is no warranty that the encrypted output file is not
 crackable! Normally you shouldn't store critical data with this encryption.
 See the LICENSE file for full disclosure.
 
+Note: As a strategy you can remove the .chest extension and reencrypt again
+to reduce chances of bruteforce attacks, since there's not really a way to
+tell if the first pass gives correct results.
+
 Enjoy!
 
