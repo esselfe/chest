@@ -16,6 +16,7 @@
 import getpass
 import hashlib
 import os
+import sys
 
 def hash_password(password):
     """Hashes the password using SHA-512 and returns the hash."""
@@ -57,7 +58,7 @@ def process_file(file_path, password, mode):
             hash_index = (hash_index + 1) % hash_len
 
 if __name__ == "__main__":
-    file_path = input("Enter the file path: ")
+    file_path = sys.argv[1]
     password = getpass.getpass("Enter the password: ")
 
     # Determine mode based on the file extension
