@@ -1,5 +1,16 @@
 # chest.py has been created by the GPT-4 chat of OpenAI by feeding it the 
-# C source code files of this project. I decided to include it in the project
+# C source code files of this project and the following prompt:
+# "Write a python script that encrypts or decrypts a file according to
+# the presence of the .chest extension in the filename. The user must
+# supply a password that is hashed with sha512. That hash is used to
+# (encrypt) decrement a byte by the hash byte and (decrypt) increment
+# each byte. Everytime a character is read from the input file an output
+# byte is calculated by the incremental hash (indexed) value. When the
+# hash index points to the end of the hash the index is reset to zero
+# and the program hops each byte of the file with each byte of the hash...
+# The password or the hash must not be stored in the file and both input
+# and output files should be the same size."
+# I decided to include it in the project
 # as a working Python variant of the original C code written by me,
 # esselfe (Stephane Fontaine).
 import hashlib
