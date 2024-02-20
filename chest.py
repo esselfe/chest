@@ -13,6 +13,7 @@
 # I decided to include it in the project
 # as a working Python variant of the original C code written by me,
 # esselfe (Stephane Fontaine).
+import getpass
 import hashlib
 import os
 
@@ -57,7 +58,7 @@ def process_file(file_path, password, mode):
 
 if __name__ == "__main__":
     file_path = input("Enter the file path: ")
-    password = input("Enter the password: ")
+    password = getpass.getpass("Enter the password: ")
 
     # Determine mode based on the file extension
     if file_path.endswith('.chest'):
