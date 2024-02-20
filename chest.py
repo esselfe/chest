@@ -1,6 +1,6 @@
 # chest.py has been created by the GPT-4 chat of OpenAI by feeding it the 
-# chest.c file of this project. I decided to include it in the project as
-# working Python variant of the original C code written by me,
+# C source code files of this project. I decided to include it in the project
+# as a working Python variant of the original C code written by me,
 # esselfe (Stephane Fontaine).
 import hashlib
 import os
