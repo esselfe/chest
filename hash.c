@@ -32,6 +32,8 @@ char *HashFromFile(char *filename) {
 	
 	SHA512((const unsigned char *)pw, filesize, (unsigned char *)sum);
 	
+	free(pw);
+	
 	return sum;
 }
 
