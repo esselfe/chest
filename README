@@ -10,6 +10,10 @@ presence of the .chest extension, whether to encrypt or decrypt.
 Neither the password or the hash are stored in the output file, the hash is
 generated at runtime after the user has been asked for a password.
 
+It is now possible to use a file as password. The hash will be computed with  
+the content all at once, so use a file that can be entirely loaded into  
+memory.
+
 Disclaimer: There is no warranty that the encrypted output file is not
 crackable! Normally you shouldn't store critical data with this encryption.
 See the LICENSE file for full disclosure.
