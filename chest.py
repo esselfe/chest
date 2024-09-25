@@ -18,6 +18,8 @@ import hashlib
 import os
 import sys
 
+chest_extension = ".chest"
+
 def hash_password(password):
     """Hashes the password using SHA-512 and returns the hash."""
     sha512 = hashlib.sha512()
@@ -32,12 +34,12 @@ def process_file(file_path, password, mode):
 
     # Determine the output file name
     if mode == 'encrypt':
-        output_file_path = f"{file_path}.chest"
+        output_file_path = f"{file_path}{chest_extension}"
     elif mode == 'decrypt':
-        if file_path.endswith('.chest'):
+        if file_path.endswith(chest_extension):
             output_file_path = file_path[:-6]
         else:
-            raise ValueError("File does not have a .chest extension for decryption.")
+            raise ValueError(f"File does not have a {chest_extension} extension for decryption.")
 
     with open(file_path, 'rb') as input_file, open(output_file_path, 'wb') as output_file:
         while byte := input_file.read(1):
@@ -62,7 +64,7 @@ if __name__ == "__main__":
     password = getpass.getpass("Enter the password: ")
 
     # Determine mode based on the file extension
-    if file_path.endswith('.chest'):
+    if file_path.endswith(chest_extension):
         mode = 'decrypt'
     else:
         mode = 'encrypt'
