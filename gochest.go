@@ -13,6 +13,8 @@ import (
 	"strings"
 )
 
+var chest_extension = ".chest"
+
 func hashPassword(password string) []byte {
 	hash := sha512.Sum512([]byte(password))
 	return hash[:]
@@ -25,12 +27,14 @@ func processFile(filePath string, password string, mode string) error {
 
 	var outputFilePath string
 	if mode == "encrypt" {
-		outputFilePath = filePath + ".chest"
+		outputFilePath = filePath + chest_extension
 	} else if mode == "decrypt" {
-		if strings.HasSuffix(filePath, ".chest") {
-			outputFilePath = strings.TrimSuffix(filePath, ".chest")
+		if strings.HasSuffix(filePath, chest_extension) {
+			outputFilePath = strings.TrimSuffix(filePath, chest_extension)
 		} else {
-			return fmt.Errorf("file does not have a .chest extension for decryption")
+			return fmt.Errorf(
+				"file does not have a %v extension for decryption",
+				chest_extension)
 		}
 	} else {
 		return fmt.Errorf("invalid mode: %s", mode)
@@ -93,7 +97,7 @@ func main() {
 
 	// Determine mode based on file extension
 	mode := "encrypt"
-	if strings.HasSuffix(filePath, ".chest") {
+	if strings.HasSuffix(filePath, chest_extension) {
 		mode = "decrypt"
 	}
 
