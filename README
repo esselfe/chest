@@ -1,4 +1,4 @@
-Updated: 240208
+Updated: 240925
 
 The chest program can be used to encrypt and decrypt files using a password
 hash hopping algorithm. Note that the encrypted output may be vulnerable to
