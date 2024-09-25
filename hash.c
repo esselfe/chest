@@ -37,7 +37,7 @@ char *HashFromFile(char *filename) {
 	return sum;
 }
 
-char *HashFromString(char *pw) {
+char *HashFromString(const char *pw) {
 	char *sum = malloc(SHA512_DIGEST_LENGTH);
 	if (sum == NULL) {
 		printf("chest::HashFromString() error: malloc() returned NULL, exiting.\n");
