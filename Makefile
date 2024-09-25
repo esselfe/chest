@@ -2,7 +2,8 @@
 CFLAGS = -std=c11 -Wall -O2 -D_DEFAULT_SOURCE
 LDFLAGS = -lcrypto
 OBJDIR = obj
-OBJS = $(OBJDIR)/decrypt.o $(OBJDIR)/encrypt.o $(OBJDIR)/chest.o
+OBJS = $(OBJDIR)/decrypt.o $(OBJDIR)/encrypt.o \
+$(OBJDIR)/hash.o $(OBJDIR)/chest.o
 PROGNAME = chest
 
 .PHONY: all clean
@@ -18,6 +19,9 @@ $(OBJDIR)/decrypt.o: decrypt.c
 
 $(OBJDIR)/encrypt.o: encrypt.c
 	gcc -c $(CFLAGS) encrypt.c -o $(OBJDIR)/encrypt.o
+
+$(OBJDIR)/hash.o: hash.c
+	gcc -c $(CFLAGS) hash.c -o $(OBJDIR)/hash.o
 
 $(OBJDIR)/chest.o: chest.c
 	gcc -c $(CFLAGS) chest.c -o $(OBJDIR)/chest.o

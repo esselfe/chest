@@ -26,32 +26,25 @@ void Decrypt(char *src, char *dst) {
 		return;
 	}
 
-	// Ask for the password
-	char *pw = malloc(4096);
-	if (pw == NULL) {
-		printf("chest error: malloc() returned NULL, exiting.\n");
-		exit(1);
+	char *sum;
+	if (use_password_file)
+		sum = HashFromFile(password_filename);
+	else {
+		// Ask for a password
+		char *pw = malloc(4096);
+		if (pw == NULL) {
+			printf("chest error: malloc() returned NULL, exiting.\n");
+			exit(1);
+		}
+		memset(pw, 0, 4096);
+		printf("Password: ");
+		fgets(pw, 4096, stdin);
+		RemoveNewline(pw);
+		
+		sum = HashFromString(pw);
+	
+		free(pw);
 	}
-	memset(pw, 0, 4096);
-	printf("Password: ");
-	fflush(stdout);
-	fgets(pw, 4096, stdin);
-	RemoveNewline(pw);
-
-	unsigned char *sumpw = malloc(SHA512_DIGEST_LENGTH);
-	if (sumpw == NULL) {
-		printf("chest error: malloc() returned NULL, exiting.\n");
-		exit(1);
-	}
-	// Example of deprecated code (openssl 3.x)
-	//SHA512_CTX ctx;
-	//SHA512_Init(&ctx);
-	//SHA512_Update(&ctx, pw, strlen(pw));
-	//SHA512_Final(sumpw, &ctx);
-
-	// Compute the hash
-	SHA512((unsigned char *)pw, strlen(pw), sumpw);
-	free(pw);
 
 	char *buf = malloc(4096);
 	if (buf == NULL) {
@@ -72,7 +65,7 @@ void Decrypt(char *src, char *dst) {
 
 		for (int i = 0; i < sz; i++) {
 			// The actual decryption happens here
-			buf2[i] = buf[i] + sumpw[cnt];
+			buf2[i] = buf[i] + sum[cnt];
 
 			++cnt;
 			// Reset the hash index if the end has been reached
@@ -90,6 +83,6 @@ void Decrypt(char *src, char *dst) {
 	fclose(fw);
 	free(buf);
 	free(buf2);
-	free(sumpw);
+	free(sum);
 }
 

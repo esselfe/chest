@@ -26,32 +26,25 @@ void Encrypt(char *src, char *dst) {
 		return;
 	}
 
-	// Ask for a password
-	char *pw = malloc(4096);
-	if (pw == NULL) {
-		printf("chest error: malloc() returned NULL, exiting.\n");
-		exit(1);
+	char *sum;
+	if (use_password_file)
+		sum = HashFromFile(password_filename);
+	else {
+		// Ask for a password
+		char *pw = malloc(4096);
+		if (pw == NULL) {
+			printf("chest error: malloc() returned NULL, exiting.\n");
+			exit(1);
+		}
+		memset(pw, 0, 4096);
+		printf("New password: ");
+		fgets(pw, 4096, stdin);
+		RemoveNewline(pw);
+		
+		sum = HashFromString(pw);
+	
+		free(pw);
 	}
-	memset(pw, 0, 4096);
-	printf("New password: ");
-	fgets(pw, 4096, stdin);
-	RemoveNewline(pw);
-
-	// Example of deprecated code (openssl 3.x)
-	//SHA512_CTX ctx;
-	//SHA512_Init(&ctx);
-	//SHA512_Update(&ctx, pw, strlen(pw));
-	//SHA512_Final(sum, &ctx);
-
-	// Compute the hash
-	unsigned char *sum = malloc(SHA512_DIGEST_LENGTH);
-	if (sum == NULL) {
-		printf("chest error: malloc() returned NULL, exiting.\n");
-		exit(1);
-	}
-	memset(sum, 0, SHA512_DIGEST_LENGTH);
-	SHA512((unsigned char *)pw, strlen(pw), sum);
-	free(pw);
 
 	char *buf = malloc(4096);
 	if (buf == NULL) {
