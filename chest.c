@@ -12,6 +12,8 @@ static const char *chest_version = "0.2.0";
 int use_password_file;
 char *password_filename;
 
+const char *chest_extension = ".chest";
+
 static struct option const long_options[] = {
 	{"help", no_argument, NULL, 'h'},
 	{"version", no_argument, NULL, 'V'},
@@ -73,7 +75,7 @@ int main(int argc, char **argv) {
 		printf("chest error: filename length can't be zero! Cancelled.\n");
 		return ECANCELED;
 	}
-	if (len >= 7 && strcmp(argv[argc-1]+strlen(argv[argc-1])-6, ".chest") == 0) {
+	if (len >= 7 && strcmp(argv[argc-1]+strlen(argv[argc-1])-6, chest_extension) == 0) {
 		filename_s = (char *)malloc(len+1);
 		if (filename_s == NULL) {
 			printf("chest error: malloc() returned NULL, exiting.\n");
@@ -105,7 +107,7 @@ int main(int argc, char **argv) {
 			printf("chest error: malloc() returned NULL, exiting.\n");
 			return 1;
 		}
-		sprintf(filename_d, "%s.chest", argv[argc-1]);
+		sprintf(filename_d, "%s%s", argv[argc-1], chest_extension);
 		Encrypt(filename_s, filename_d);
 	}
 
