@@ -1,0 +1,13 @@
+[package]
+name = "rschest"
+version = "0.2.3"
+edition = "2021"
+
+[dependencies]
+sha2 = "0.10"          # For SHA-512 hashing
+rpassword = "7.3.1"      # For reading passwords securely from the terminal
+
+[[bin]]
+name = "rschest"
+path = "rschest.rs"
+
