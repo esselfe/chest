@@ -8,7 +8,7 @@ void RemoveNewline(char *text);
 void Encrypt(char *src, char *dst);
 void Decrypt(char *src, char *dst);
 char *HashFromFile(char *filename);
-char *HashFromString(char *pw);
+char *HashFromString(const char *pw);
 
 #endif /* CHEST_H */
 
