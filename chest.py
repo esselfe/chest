@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # chest.py has been created by the GPT-4 chat of OpenAI by feeding it the
 # C source code files of this project and the following prompt:
 # "Write a python script that encrypts or decrypts a file according to
