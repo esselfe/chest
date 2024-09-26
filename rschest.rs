@@ -1,3 +1,4 @@
+// This code was also generated using ChatGPT 4o.
 use sha2::{Sha512, Digest};
 use std::fs::File;
 use std::io::{self, Read, Write};
