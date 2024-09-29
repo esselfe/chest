@@ -107,13 +107,16 @@ func main() {
         }
         defer file.Close()
 
-        scanner := bufio.NewScanner(file)
-        if scanner.Scan() {
-            password = scanner.Text()
-        } else {
-            fmt.Println("Error: password file is empty")
-            os.Exit(1)
-        }
+        passwordBytes, err := io.ReadAll(file)
+	if err != nil {
+	    fmt.Printf("Error reading password file: %v\n", err)
+	    os.Exit(1)
+	}
+	if len(passwordBytes) == 0 {
+	    fmt.Println("Error: password file is empty")
+	    os.Exit(1)
+	}
+	password = string(passwordBytes)
     } else {
         fmt.Print("Enter password: ")
         scanner := bufio.NewScanner(os.Stdin)
