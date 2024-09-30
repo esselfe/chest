@@ -1,8 +1,8 @@
-Updated: 240925
+Updated: 240930
 
 The chest program can be used to encrypt and decrypt files using a password
-hash hopping algorithm. Note that the encrypted output may be vulnerable to
-hash database cracking due to its simplicity.
+hash (SHA-512) hopping algorithm. Note that the encrypted output may be
+vulnerable to hash database cracking due to its simplicity.
 
 Just give a filename as argument and it should detect, according to the
 presence of the .chest extension, whether to encrypt or decrypt.
