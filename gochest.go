@@ -15,7 +15,7 @@ import (
     "bufio"
 )
 
-var chest_extension = ".chest"
+var chest_extension string
 
 func hashPassword(password string) []byte {
     hash := sha512.Sum512([]byte(password))
@@ -88,12 +88,15 @@ func processFile(filePath string, password string, mode string) error {
 
 func main() {
     passwordFile := flag.String("p", "", "Password file")
+    extension := flag.String("e", ".chest", "File extension for encrypted files")
     flag.Parse()
 
     if flag.NArg() < 1 {
-        fmt.Println("Usage: gochest -p password_file filename")
+        fmt.Println("Usage: gochest -e extension -p password_file filename")
         os.Exit(1)
     }
+    
+    chest_extension = *extension
 
     filePath := flag.Arg(0)
 
