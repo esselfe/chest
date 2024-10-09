@@ -19,7 +19,7 @@ import os
 import sys
 import argparse
 
-chest_extension = ".chest"
+default_extension = ".chest"
 
 def hash_password(password):
     # Hashes the password using SHA-512 and returns the hash.
@@ -27,7 +27,7 @@ def hash_password(password):
     sha512.update(password.encode('utf-8'))
     return sha512.digest()
 
-def process_file(file_path, password, mode):
+def process_file(file_path, password, mode, extension):
     # Encrypts or decrypts the file based on the mode.
     hash_bytes = hash_password(password)
     hash_len = len(hash_bytes)
@@ -35,12 +35,12 @@ def process_file(file_path, password, mode):
 
     # Determine the output file name
     if mode == 'encrypt':
-        output_file_path = f"{file_path}{chest_extension}"
+        output_file_path = f"{file_path}{extension}"
     elif mode == 'decrypt':
-        if file_path.endswith(chest_extension):
-            output_file_path = file_path[:-len(chest_extension)]
+        if file_path.endswith(extension):
+            output_file_path = file_path[:-len(extension)]
         else:
-            raise ValueError(f"File does not have a {chest_extension} extension for decryption.")
+            raise ValueError(f"File does not have a {extension} extension for decryption.")
 
     with open(file_path, 'rb') as input_file, open(output_file_path, 'wb') as output_file:
         while byte := input_file.read(1):
@@ -65,6 +65,7 @@ def process_file(file_path, password, mode):
 def main():
     parser = argparse.ArgumentParser(description="Encrypt or decrypt a file using SHA-512 hashed password.")
     parser.add_argument("filename", help="The name of the file to encrypt or decrypt")
+    parser.add_argument("-e", "--extension", default=default_extension, help=f"File extension for encrypted file (default: {default_extension})")
     parser.add_argument("-p", "--password-file", help="The file containing the password", required=False)
 
     args = parser.parse_args()
@@ -81,10 +82,10 @@ def main():
         password = getpass.getpass("Enter password: ")
 
     # Determine whether to encrypt or decrypt
-    mode = 'decrypt' if args.filename.endswith(chest_extension) else 'encrypt'
+    mode = 'decrypt' if args.filename.endswith(args.extension) else 'encrypt'
     
     # Process the file
-    process_file(args.filename, password, mode)
+    process_file(args.filename, password, mode, args.extension)
 
 if __name__ == "__main__":
     main()
