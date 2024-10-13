@@ -1,0 +1,41 @@
+.\" Manpage for chest.
+.\" Contact esselfe16@gmail.com to correct errors or typos or open a pull request on Github.
+.TH man 1 "13 October 2024" "0.2.5" "chest man page"
+.SH NAME
+chest \- Encrypt and decrypt a file.
+.SH SYNOPSIS
+chest [ehpV] FILENAME
+.SH DESCRIPTION
+The chest program can be used to encrypt and decrypt files using a password
+hash (SHA-512) hopping algorithm. Note that the encrypted output may be
+vulnerable to hash database cracking due to its simplicity.
+Just give a filename as argument and it should detect, according to the
+presence of the .chest extension, whether to encrypt or decrypt.
+Neither the password or the hash are stored in the output file, the hash is
+generated at runtime after the user has been asked for a password.
+.SH OPTIONS
+.TP
+-h, --help
+Show a usage help message and exit
+.TP
+-e, --extension ".ext"
+Specify the chest file extension for encrypted file
+.TP
+-p, --password-file FILENAME
+Specify in which file to take data as password
+.TP
+-V, --version
+Show the program version and exit
+.SH EXAMPLES
+.TP
+chest -e ".crypt" -p ~/.secret-pass backups-241012.tar.xz
+Encrypt an archive using a password file, to a file ending in .crypt
+.TP
+chest .htpasswd.chest
+Decrypt a chest file by asking for a password
+.SH BUGS
+The C version and the Go versions should give the same results, but differ
+from the encrypted output from the Python and Rust versions when used with
+a password file ending with a newline character.
+.SH AUTHOR
+Stephane Fontaine (esselfe16@gmail.com)
