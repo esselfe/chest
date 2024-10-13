@@ -37,5 +37,13 @@ Decrypt a chest file by asking for a password
 The C version and the Go versions should give the same results, but differ
 from the encrypted output from the Python and Rust versions when used with
 a password file ending with a newline character.
+.SH NOTES
+Disclaimer: There is no warranty that the encrypted output file is not
+crackable! Normally you shouldn't store critical data with this encryption.
+See the LICENSE file for full disclosure.
+
+As a strategy you can remove the .chest extension and reencrypt again
+to reduce chances of bruteforce attacks, since there's not really a way to
+tell if the first pass gives correct results.
 .SH AUTHOR
 Stephane Fontaine (esselfe16@gmail.com)
