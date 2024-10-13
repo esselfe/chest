@@ -5,14 +5,25 @@ OBJDIR = obj
 OBJS = $(OBJDIR)/decrypt.o $(OBJDIR)/encrypt.o \
 $(OBJDIR)/hash.o $(OBJDIR)/chest.o
 PROGNAME = chest
+PROGNAME_GO = gochest
+PROGNAME_RUST = target/release/rschest
+PREFIX ?= /usr/local
 
-.PHONY: all clean
+.PHONY: default all prepare go rust clean install
 
-default: prepare $(OBJS) $(PROGNAME)
+default: all
+
+all: prepare go rust $(OBJS) $(PROGNAME)
 	@ls -l --color=auto $(PROGNAME)
 
 prepare:
 	@[ -d $(OBJDIR) ] || mkdir -v $(OBJDIR)
+
+go:
+	@which go &>/dev/null && go build -v -o $(PROGNAME_GO) gochest.go
+
+rust:
+	@which cargo &>/dev/null && cargo build --release
 
 $(OBJDIR)/decrypt.o: decrypt.c
 	gcc -c $(CFLAGS) decrypt.c -o $(OBJDIR)/decrypt.o
@@ -30,5 +41,15 @@ $(PROGNAME): $(OBJS)
 	gcc $(CFLAGS) $(OBJS) -o $(PROGNAME) $(LDFLAGS)
 
 clean:
-	@rm -rfv $(OBJDIR) $(PROGNAME) || true
+	@rm -rfv target $(OBJDIR) $(PROGNAME) $(PROGNAME_GO) || true
+
+install:
+	[ -d $(PREFIX)/bin ] || mkdir -pv $(PREFIX)/bin
+	[ -d $(PREFIX)/share/man/man1 ] || mkdir -pv $(PREFIX)/share/man/man1
+	@which go &>/dev/null && install -vm 0755 $(PROGNAME_GO) $(PREFIX)/bin/
+	@which cargo &>/dev/null && install -vm 0755 $(PROGNAME_RUST) $(PREFIX)/bin/
+	@which python3 &>/dev/null && install -vm 0755 chest.py $(PREFIX)/bin/
+	install -vm 0755 $(PROGNAME) $(PREFIX)/bin/
+	install -vm 0644 chest.1 $(PREFIX)/share/man/man1/
+	gzip -9 $(PREFIX)/share/man/man1/chest.1
 
