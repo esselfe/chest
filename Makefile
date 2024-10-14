@@ -20,10 +20,10 @@ prepare:
 	@[ -d $(OBJDIR) ] || mkdir -v $(OBJDIR)
 
 go:
-	@which go &>/dev/null && go build -v -o $(PROGNAME_GO) gochest.go
+	@{ which go &>/dev/null && go build -v -o $(PROGNAME_GO) gochest.go; } || true
 
 rust:
-	@which cargo &>/dev/null && cargo build --release
+	@{ which cargo &>/dev/null && cargo build --release; } || true
 
 $(OBJDIR)/decrypt.o: decrypt.c
 	gcc -c $(CFLAGS) decrypt.c -o $(OBJDIR)/decrypt.o
