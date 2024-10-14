@@ -46,9 +46,9 @@ clean:
 install:
 	[ -d $(PREFIX)/bin ] || mkdir -pv $(PREFIX)/bin
 	[ -d $(PREFIX)/share/man/man1 ] || mkdir -pv $(PREFIX)/share/man/man1
-	@which go &>/dev/null && install -vm 0755 $(PROGNAME_GO) $(PREFIX)/bin/
-	@which cargo &>/dev/null && install -vm 0755 $(PROGNAME_RUST) $(PREFIX)/bin/
-	@which python3 &>/dev/null && install -vm 0755 chest.py $(PREFIX)/bin/
+	@{ which go &>/dev/null && install -vm 0755 $(PROGNAME_GO) $(PREFIX)/bin/; } || true
+	@{ which cargo &>/dev/null && install -vm 0755 $(PROGNAME_RUST) $(PREFIX)/bin/; } || true
+	@{ which python3 &>/dev/null && install -vm 0755 chest.py $(PREFIX)/bin/; } || true
 	install -vm 0755 $(PROGNAME) $(PREFIX)/bin/
 	install -vm 0644 chest.1 $(PREFIX)/share/man/man1/
 	gzip -9 $(PREFIX)/share/man/man1/chest.1
