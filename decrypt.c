@@ -27,8 +27,12 @@ void Decrypt(char *src, char *dst) {
 	}
 
 	char *sum;
-	if (use_password_file)
-		sum = HashSHA512FromFile(password_filename);
+	if (use_password_file) {
+		if (use_shake256)
+			sum = HashShake256FromFile(password_filename);
+		else
+			sum = HashSHA512FromFile(password_filename);
+	}
 	else {
 		// Ask for a password
 		char *pw = malloc(4096);
@@ -41,7 +45,10 @@ void Decrypt(char *src, char *dst) {
 		fgets(pw, 4096, stdin);
 		RemoveNewline(pw);
 		
-		sum = HashSHA512FromString(pw);
+		if (use_shake256)
+			sum = HashShake256FromString(pw);
+		else
+			sum = HashSHA512FromString(pw);
 	
 		free(pw);
 	}
@@ -69,7 +76,7 @@ void Decrypt(char *src, char *dst) {
 
 			++cnt;
 			// Reset the hash index if the end has been reached
-			if (cnt >= SHA512_DIGEST_LENGTH)
+			if (cnt >= hash_length)
 				cnt = 0;
 		}
 

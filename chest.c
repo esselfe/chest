@@ -4,6 +4,7 @@
 #include <string.h>
 #include <errno.h>
 #include <getopt.h>
+#include <openssl/sha.h>
 
 #include "chest.h"
 
@@ -99,6 +100,8 @@ int main(int argc, char **argv) {
 	
 	if (use_shake256)
 		hash_length = hash_base * hash_factor;
+	else
+		hash_length = SHA512_DIGEST_LENGTH;
 
 	// Must have at least 1 argument
 	if (argc < 2) {
