@@ -7,7 +7,7 @@
 
 #include "chest.h"
 
-char *HashFromFile(char *filename) {
+char *HashSHA512FromFile(char *filename) {
 	FILE *fp = fopen(filename, "rb");
 	if (fp == NULL) {
 		printf("chest::HashFromFile() error: Cannot open %s: %s\n",
@@ -37,7 +37,7 @@ char *HashFromFile(char *filename) {
 	return sum;
 }
 
-char *HashFromString(const char *pw) {
+char *HashSHA512FromString(const char *pw) {
 	char *sum = malloc(SHA512_DIGEST_LENGTH);
 	if (sum == NULL) {
 		printf("chest::HashFromString() error: malloc() returned NULL, exiting.\n");

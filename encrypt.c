@@ -28,7 +28,7 @@ void Encrypt(char *src, char *dst) {
 
 	char *sum;
 	if (use_password_file)
-		sum = HashFromFile(password_filename);
+		sum = HashSHA512FromFile(password_filename);
 	else {
 		// Ask for a password
 		char *pw = malloc(4096);
@@ -41,7 +41,7 @@ void Encrypt(char *src, char *dst) {
 		fgets(pw, 4096, stdin);
 		RemoveNewline(pw);
 		
-		sum = HashFromString(pw);
+		sum = HashSHA512FromString(pw);
 	
 		free(pw);
 	}

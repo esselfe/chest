@@ -7,10 +7,13 @@
 
 #include "chest.h"
 
-static const char *chest_version = "0.3.0";
+static const char *chest_version = "0.2.6";
 
 int use_password_file;
 char *password_filename;
+unsigned int hash_base_size;
+unsigned int hash_factor;
+unsigned int hash_length;
 
 const char *chest_default_extension = ".chest";
 const char *chest_extension;
