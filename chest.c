@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
 		printf("chest error: filename length can't be zero! Cancelled.\n");
 		return ECANCELED;
 	}
-	if (len >= 7 && 
+	if (len >= strlen(chest_extension) && 
 	  strcmp(argv[argc-1]+strlen(argv[argc-1]) - strlen(chest_extension),
 	    chest_extension) == 0) {
 		filename_s = (char *)malloc(len+1);
