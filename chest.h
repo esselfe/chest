@@ -3,9 +3,11 @@
 
 extern int use_password_file;
 extern char *password_filename;
-extern unsigned int hash_base_size;
+extern unsigned int hash_base;
 extern unsigned int hash_factor;
 extern unsigned int hash_length;
+extern unsigned int use_shake256;
+extern char *hash;
 
 void RemoveNewline(char *text);
 void Encrypt(char *src, char *dst);

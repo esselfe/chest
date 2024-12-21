@@ -11,9 +11,11 @@ static const char *chest_version = "0.3.0";
 
 int use_password_file;
 char *password_filename;
-unsigned int hash_base_size;
-unsigned int hash_factor;
+unsigned int hash_base = 1024;
+unsigned int hash_factor = 1024; // base * factor = 1MB
 unsigned int hash_length;
+unsigned int use_shake256;
+char *hash;
 
 const char *chest_default_extension = ".chest";
 const char *chest_extension;
@@ -21,14 +23,18 @@ const char *chest_extension;
 static struct option const long_options[] = {
 	{"help", no_argument, NULL, 'h'},
 	{"version", no_argument, NULL, 'V'},
+	{"base", required_argument, NULL, 'b'},
 	{"extension", required_argument, NULL, 'e'},
+	{"factor", required_argument, NULL, 'f'},
 	{"password-file", required_argument, NULL, 'p'},
+	{"shake256", no_argument, NULL, 's'},
 	{NULL, 0, NULL, 0}
 };
-static char const *short_options = "hVe:p:";
+static char const *short_options = "hVb:e:f:p:s";
 
 void ChestHelp(void) {
 	printf("Usage: chest { -h/--help | -V/--version |\n"
+	"    -s/--shake256 [ -b/--base BYTES | -f/--factor NUM ]\n"
 	"    -e/--extension STRING | -p/--password-file FILENAME } FILENAME\n");
 }
 
@@ -55,9 +61,25 @@ int main(int argc, char **argv) {
 		case 'V':
 			printf("chest %s\n", chest_version);
 			exit(0);
+		case 'b':
+			if (optarg != NULL && strlen(optarg)) {
+				hash_base = atoi(optarg);
+				if (hash_base == 0)
+					hash_base = 1024;
+			}
+			
+			break;
 		case 'e':
 			if (optarg != NULL && strlen(optarg))
 				chest_extension = strdup(optarg);
+			
+			break;
+		case 'f':
+			if (optarg != NULL && strlen(optarg)) {
+				hash_factor = atoi(optarg);
+				if (hash_factor == 0)
+					hash_factor = 1024;
+			}
 			
 			break;
 		case 'p':
@@ -66,11 +88,17 @@ int main(int argc, char **argv) {
 				password_filename = strdup(optarg);
 			
 			break;
+		case 's':
+			use_shake256 = 1;
+			break;
 		default:
 			printf("chest warning: unknown option %d/'%c'\n", c, (char)c);
 			break;
 		}
 	}
+	
+	if (use_shake256)
+		hash_length = hash_base * hash_factor;
 
 	// Must have at least 1 argument
 	if (argc < 2) {
