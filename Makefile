@@ -21,10 +21,10 @@ prepare:
 	@[ -d $(OBJDIR) ] || mkdir -v $(OBJDIR)
 
 go:
-	@which go &>/dev/null && go build -v -o $(PROGNAME_GO) gochest.go
+	@{ which go &>/dev/null && go build -v -o $(PROGNAME_GO) gochest.go; } || true
 
 rust:
-	@which cargo &>/dev/null && cargo build --release
+	@{ which cargo &>/dev/null && cargo build --release; } || true
 
 $(OBJDIR)/decrypt.o: decrypt.c
 	gcc -c $(CFLAGS) decrypt.c -o $(OBJDIR)/decrypt.o
@@ -50,9 +50,9 @@ clean:
 install:
 	[ -d $(PREFIX)/bin ] || mkdir -pv $(PREFIX)/bin
 	[ -d $(PREFIX)/share/man/man1 ] || mkdir -pv $(PREFIX)/share/man/man1
-	@which go &>/dev/null && install -vm 0755 $(PROGNAME_GO) $(PREFIX)/bin/
-	@which cargo &>/dev/null && install -vm 0755 $(PROGNAME_RUST) $(PREFIX)/bin/
-	@which python3 &>/dev/null && install -vm 0755 chest.py $(PREFIX)/bin/
+	@{ which go &>/dev/null && install -vm 0755 $(PROGNAME_GO) $(PREFIX)/bin/; } || true
+	@{ which cargo &>/dev/null && install -vm 0755 $(PROGNAME_RUST) $(PREFIX)/bin/; } || true
+	@{ which python3 &>/dev/null && install -vm 0755 chest.py $(PREFIX)/bin/; } || true
 	install -vm 0755 $(PROGNAME) $(PREFIX)/bin/
 	install -vm 0644 chest.1 $(PREFIX)/share/man/man1/
 	gzip -9 $(PREFIX)/share/man/man1/chest.1
