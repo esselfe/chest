@@ -10,7 +10,7 @@
 char *HashSHA512FromFile(char *filename) {
 	FILE *fp = fopen(filename, "rb");
 	if (fp == NULL) {
-		printf("chest::HashFromFile() error: Cannot open %s: %s\n",
+		printf("chest::HashSHA512FromFile() error: Cannot open %s: %s\n",
 			filename, strerror(errno));
 		exit(1);
 	}
@@ -20,12 +20,17 @@ char *HashSHA512FromFile(char *filename) {
 	fseek(fp, 0, SEEK_SET);
 
 	char *pw = malloc(filesize);
+	if (pw == NULL) {
+		printf("chest::HashSHA512FromString() error: malloc() returned NULL, exiting.\n");
+		fclose(fp);
+		exit(ENOMEM);
+	}
 	fread(pw, 1, filesize, fp);
 	fclose(fp);
 
 	char *sum = malloc(SHA512_DIGEST_LENGTH);
 	if (sum == NULL) {
-		printf("chest::HashFromFile() error: malloc() returned NULL, exiting.\n");
+		printf("chest::HashSHA512FromFile() error: malloc() returned NULL, exiting.\n");
 		exit(1);
 	}
 	memset(sum, 0, SHA512_DIGEST_LENGTH);
@@ -40,8 +45,8 @@ char *HashSHA512FromFile(char *filename) {
 char *HashSHA512FromString(const char *pw) {
 	char *sum = malloc(SHA512_DIGEST_LENGTH);
 	if (sum == NULL) {
-		printf("chest::HashFromString() error: malloc() returned NULL, exiting.\n");
-		exit(1);
+		printf("chest::HashSHA512FromString() error: malloc() returned NULL, exiting.\n");
+		exit(ENOMEM);
 	}
 	memset(sum, 0, SHA512_DIGEST_LENGTH);
 	

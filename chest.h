@@ -14,6 +14,8 @@ void Encrypt(char *src, char *dst);
 void Decrypt(char *src, char *dst);
 char *HashSHA512FromFile(char *filename);
 char *HashSHA512FromString(const char *pw);
+char *HashShake256FromFile(char *filename);
+char *HashShake256FromString(const char *pw);
 
 #endif /* CHEST_H */
 
