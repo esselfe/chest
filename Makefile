@@ -66,5 +66,5 @@ install: $(if $(USE_GO),install-go) $(if $(USE_RUST),install-rust) $(if $(USE_PY
 	gzip -9 $(PREFIX)/share/man/man1/chest.1
 
 clean:
-	@rm -rfv target $(OBJDIR) $(PROGNAME) $(PROGNAME_GO) $(PROGNAME_RUST) || true
+	@rm -rfv target $(OBJDIR) $(PROGNAME) $(PROGNAME_GO) || true
 
