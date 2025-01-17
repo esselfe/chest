@@ -17,23 +17,21 @@ PROGNAME_RUST = target/release/rschest
 
 PREFIX ?= /usr/local
 
-.PHONY: default all prepare go rust clean install
+.PHONY: default all prepare go rust install-go install-rust install-python install clean
 
 default: all
 
-all: prepare go rust $(OBJS) $(PROGNAME)
+all: prepare $(if $(USE_GO),go) $(if $(USE_RUST),rust) $(OBJS) $(PROGNAME)
 	@ls -l --color=auto $(PROGNAME)
 
 prepare:
 	@[ -d $(OBJDIR) ] || mkdir -v $(OBJDIR)
 
 go:
-	@{ which go &>/dev/null && \
-	go build -v -o $(PROGNAME_GO) gochest.go; } || true
+	go build -v -o $(PROGNAME_GO) gochest.go
 
 rust:
-	@{ which cargo &>/dev/null && \
-	cargo build --release; } || true
+	cargo build --release
 
 $(OBJDIR)/decrypt.o: decrypt.c
 	$(CC) -c $(CFLAGS) decrypt.c -o $(OBJDIR)/decrypt.o
@@ -53,17 +51,20 @@ $(OBJDIR)/chest.o: chest.c
 $(PROGNAME): $(OBJS)
 	$(CC) $(OBJS) -o $(PROGNAME) $(LDFLAGS)
 
-clean:
-	@rm -rfv target $(OBJDIR) $(PROGNAME) $(PROGNAME_GO) || true
+install-go:
+	@install -Dvm 0755 $(PROGNAME_GO) $(PREFIX)/bin/
 
-install:
-	@{ which go &>/dev/null && \
-	  install -Dvm 0755 $(PROGNAME_GO) $(PREFIX)/bin/; } || true
-	@{ which cargo &>/dev/null && \
-	  install -Dvm 0755 $(PROGNAME_RUST) $(PREFIX)/bin/; } || true
-	@{ which python3 &>/dev/null && \
-	  install -Dvm 0755 chest.py $(PREFIX)/bin/; } || true
+install-rust:
+	@install -Dvm 0755 $(PROGNAME_RUST) $(PREFIX)/bin/
+
+install-python:
+	@install -Dvm 0755 chest.py $(PREFIX)/bin/
+
+install: $(if $(USE_GO),install-go) $(if $(USE_RUST),install-rust) $(if $(USE_PYTHON),install-python)
 	install -Dvm 0755 $(PROGNAME) $(PREFIX)/bin/
 	install -Dvm 0644 chest.1 $(PREFIX)/share/man/man1/
 	gzip -9 $(PREFIX)/share/man/man1/chest.1
+
+clean:
+	@rm -rfv target $(OBJDIR) $(PROGNAME) $(PROGNAME_GO) $(PROGNAME_RUST) || true
 
