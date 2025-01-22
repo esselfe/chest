@@ -1,4 +1,4 @@
-Updated: 241221
+Updated: 250122
 
 The chest program can be used to encrypt and decrypt files using a password
 hash hopping algorithm (SHA512 with fixed length or SHAKE256 with variable
@@ -17,6 +17,22 @@ memory.
 
 Also, it's now possible to specify the extension used to detect the
 correct mode as a program option.
+
+BUILD AND DEPENDENCIES
+To compile the C source code into an executable, you will need the OpenSSL
+development headers installed. Then run 'make && sudo make install' in a
+terminal opened into the extracted source directory. If you want the other
+implementations written in Python, Go or Rust, just add the following flags
+you want:
+  USE_PYTHON=1
+  USE_GO=1
+  USE_RUST=1
+e.g.: make USE_GO=1 && sudo make USE_GO=1 install
+
+INSTALLATION
+By default, the "install" target installs the program(s) into /usr/local/bin.
+This can be changed by adding the "PREFIX=/your/path/here" option to the make
+command. E.g.: sudo make PREFIX=/opt install
 
 DISCLAIMER
 There is no warranty that the encrypted output file is not
