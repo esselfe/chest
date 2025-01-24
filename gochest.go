@@ -7,6 +7,7 @@ package main
 
 import (
     "crypto/sha512"
+    "golang.org/x/crypto/sha3"
     "flag"
     "fmt"
     "io"
@@ -16,14 +17,32 @@ import (
 )
 
 var chest_extension string
+var use_shake256 bool
+var shake256_base int
+var shake256_factor int
 
-func hashPassword(password string) []byte {
+func hashSHA512Password(password string) []byte {
     hash := sha512.Sum512([]byte(password))
     return hash[:]
 }
 
+func hashSHAKE256Password(password string, hashlen int) []byte {
+    hash := sha3.NewShake256()
+    hash.Write([]byte(password))
+    
+    output := make([]byte, hashlen)
+    hash.Read(output)
+    
+    return output[:]
+}
+
 func processFile(filePath string, password string, mode string) error {
-    hashBytes := hashPassword(password)
+    var hashBytes []byte
+    if use_shake256 == true {
+        hashBytes = hashSHAKE256Password(password, shake256_base * shake256_factor)
+    } else {
+        hashBytes = hashSHA512Password(password)
+    }
     hashLen := len(hashBytes)
     hashIndex := 0
 
@@ -89,10 +108,25 @@ func processFile(filePath string, password string, mode string) error {
 func main() {
     passwordFile := flag.String("p", "", "Password file")
     extension := flag.String("e", ".chest", "File extension for encrypted files")
+    use_shake256Flag := flag.Bool("s", false, "Use shake256 instead of sha512")
+    shake256_baseFlag := flag.Int("b", 1024, "Base size of shake256 hash")
+    shake256_factorFlag := flag.Int("f", 1024, "Base size multiplication factor")
     flag.Parse()
+    
+    if *shake256_baseFlag <= 0 {
+        *shake256_baseFlag = 1024
+    }
+    if *shake256_factorFlag <= 0 {
+        *shake256_factorFlag = 1024
+    }
+    
+    use_shake256 = *use_shake256Flag
+    shake256_base = *shake256_baseFlag
+    shake256_factor = *shake256_factorFlag
 
     if flag.NArg() < 1 {
         fmt.Println("Usage: gochest -e extension -p password_file filename")
+        fmt.Println("               -s -b size -f factor")
         os.Exit(1)
     }
     
