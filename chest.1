@@ -1,18 +1,18 @@
 .\" Manpage for chest.
 .\" Contact esselfe16@gmail.com to correct errors or typos or open a pull request on Github.
-.TH man 1 "21 December 2024" "0.3.0" "chest man page"
+.TH man 1 "29 January 2025" "0.3.3" "chest man page"
 .SH NAME
-chest \- Encrypt and decrypt a file.
+chest \- Encrypt or decrypt a file.
 .SH SYNOPSIS
 chest [befhpsV] FILENAME
 .SH DESCRIPTION
 The chest program can be used to encrypt and decrypt files using a password
-hash (SHA-512 or SHAKE256) hopping algorithm. Note that the encrypted output
-may be vulnerable to hash database cracking due to its simplicity.
-Just give a filename as argument and it should detect, according to the
-presence of the .chest extension, whether to encrypt or decrypt.
-Neither the password or the hash are stored in the output file, the hash is
-generated at runtime after the user has been asked for a password.
+hash (SHA512 with fixed length or SHAKE256 with variable length) hopping
+algorithm. Note that the encrypted output may be vulnerable to hash database
+cracking due to its simplicity. Just give a filename as argument and it should
+detect, according to the presence of the .chest extension, whether to encrypt
+or decrypt. Neither the password or the hash are stored in the output file,
+the hash is generated at runtime after the user has been asked for a password.
 .SH OPTIONS
 .TP
 -h, --help
@@ -20,7 +20,7 @@ Show a usage help message and exit.
 .TP
 -b, --base NUM
 Specify the base size that will be multiplied with factor. This defaults
-to 1024.
+to 1024 bytes.
 .TP
 -e, --extension ".ext"
 Specify the chest file extension for encrypted file.
@@ -33,8 +33,9 @@ Specify in which file to take data as password.
 .TP
 -s, --shake256
 Use the SHAKE256 hash function with variable hash size instead of the
-fixed size of SHA512. Works with the -b and -f options. If those are unspecified
-a base and factor of 1024 will be used, giving 1MB hash to crypt with.
+fixed size of SHA512. Works with the -b and -f options. If those are
+unspecified, a base and factor of 1024 will be used, giving 1MiB hash to
+crypt with.
 .TP
 -V, --version
 Show the program version and exit.
@@ -43,7 +44,7 @@ Show the program version and exit.
 chest -e ".crypt" -p ~/.secret-pass backups-241012.tar.xz
 Encrypt an archive using a password file, to a file ending in .crypt
 .TP
-chest -s -b 4096 -f 1024 secret.txt
+chest -s -b 4000 -f 1000 secret.txt
 Encrypt a file using a 4MB hash.
 .TP
 chest .htpasswd.chest
