@@ -1,4 +1,4 @@
-![chest logo](chest.png)
+![chest logo](chest-128.png)
 Updated: 250129
 
 The chest program can be used to encrypt and decrypt files using a password
