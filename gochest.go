@@ -16,21 +16,21 @@ import (
     "bufio"
 )
 
-var chest_extension string
-var use_shake256 bool
-var shake256_base int
-var shake256_factor int
+var chestExtension string
+var useShake256 bool
+var shake256Base int
+var shake256Factor int
 
 func hashSHA512Password(password string) []byte {
     hash := sha512.Sum512([]byte(password))
     return hash[:]
 }
 
-func hashSHAKE256Password(password string, hashlen int) []byte {
+func hashSHAKE256Password(password string, hashLen int) []byte {
     hash := sha3.NewShake256()
     hash.Write([]byte(password))
     
-    output := make([]byte, hashlen)
+    output := make([]byte, hashLen)
     hash.Read(output)
     
     return output[:]
@@ -38,8 +38,8 @@ func hashSHAKE256Password(password string, hashlen int) []byte {
 
 func processFile(filePath string, password string, mode string) error {
     var hashBytes []byte
-    if use_shake256 == true {
-        hashBytes = hashSHAKE256Password(password, shake256_base * shake256_factor)
+    if useShake256 == true {
+        hashBytes = hashSHAKE256Password(password, shake256Base * shake256Factor)
     } else {
         hashBytes = hashSHA512Password(password)
     }
@@ -48,14 +48,14 @@ func processFile(filePath string, password string, mode string) error {
 
     var outputFilePath string
     if mode == "encrypt" {
-        outputFilePath = filePath + chest_extension
+        outputFilePath = filePath + chestExtension
     } else if mode == "decrypt" {
-        if strings.HasSuffix(filePath, chest_extension) {
-            outputFilePath = strings.TrimSuffix(filePath, chest_extension)
+        if strings.HasSuffix(filePath, chestExtension) {
+            outputFilePath = strings.TrimSuffix(filePath, chestExtension)
         } else {
             return fmt.Errorf(
                 "file does not have a %v extension for decryption",
-                chest_extension)
+                chestExtension)
         }
     } else {
         return fmt.Errorf("invalid mode: %s", mode)
@@ -108,21 +108,21 @@ func processFile(filePath string, password string, mode string) error {
 func main() {
     passwordFile := flag.String("p", "", "Password file")
     extension := flag.String("e", ".chest", "File extension for encrypted files")
-    use_shake256Flag := flag.Bool("s", false, "Use shake256 instead of sha512")
-    shake256_baseFlag := flag.Int("b", 1024, "Base size of shake256 hash")
-    shake256_factorFlag := flag.Int("f", 1024, "Base size multiplication factor")
+    useShake256Flag := flag.Bool("s", false, "Use shake256 instead of sha512")
+    shake256BaseFlag := flag.Int("b", 1024, "Base size of shake256 hash")
+    shake256FactorFlag := flag.Int("f", 1024, "Base size multiplication factor")
     flag.Parse()
     
-    if *shake256_baseFlag <= 0 {
-        *shake256_baseFlag = 1024
+    if *shake256BaseFlag <= 0 {
+        *shake256BaseFlag = 1024
     }
-    if *shake256_factorFlag <= 0 {
-        *shake256_factorFlag = 1024
+    if *shake256FactorFlag <= 0 {
+        *shake256FactorFlag = 1024
     }
     
-    use_shake256 = *use_shake256Flag
-    shake256_base = *shake256_baseFlag
-    shake256_factor = *shake256_factorFlag
+    useShake256 = *useShake256Flag
+    shake256Base = *shake256BaseFlag
+    shake256Factor = *shake256FactorFlag
 
     if flag.NArg() < 1 {
         fmt.Println("Usage: gochest -e extension -p password_file filename")
@@ -130,7 +130,7 @@ func main() {
         os.Exit(1)
     }
     
-    chest_extension = *extension
+    chestExtension = *extension
 
     filePath := flag.Arg(0)
 
@@ -163,7 +163,7 @@ func main() {
 
     // Determine whether to encrypt or decrypt
     mode := "encrypt"
-    if strings.HasSuffix(filePath, chest_extension) {
+    if strings.HasSuffix(filePath, chestExtension) {
         mode = "decrypt"
     }
 
