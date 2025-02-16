@@ -4,6 +4,7 @@
 #include <string.h>
 #include <errno.h>
 #include <getopt.h>
+#include <sys/stat.h>
 #include <openssl/sha.h>
 
 #include "chest.h"
@@ -15,6 +16,7 @@ char *password_filename;
 unsigned int hash_base = 1024;
 unsigned int hash_factor = 1024; // base * factor = 1MB
 unsigned int hash_length;
+unsigned int hash_length_is_file_size; // bool
 unsigned int use_shake256;
 char *hash;
 
@@ -28,14 +30,16 @@ static struct option const long_options[] = {
 	{"extension", required_argument, NULL, 'e'},
 	{"factor", required_argument, NULL, 'f'},
 	{"password-file", required_argument, NULL, 'p'},
+	{"shake256-full-size", no_argument, NULL, 'S'},
 	{"shake256", no_argument, NULL, 's'},
 	{NULL, 0, NULL, 0}
 };
-static char const *short_options = "hVb:e:f:p:s";
+static char const *short_options = "hVb:e:f:p:Ss";
 
 void ChestHelp(void) {
 	printf("Usage: chest { -h/--help | -V/--version |\n"
-	"    -s/--shake256 [ -b/--base BYTES | -f/--factor NUM ]\n"
+	"    -s/--shake256 [ -b/--base BYTES | -f/--factor NUM ] |\n"
+	"    -S/--shake256-full-size |\n"
 	"    -e/--extension STRING | -p/--password-file FILENAME } FILENAME\n");
 }
 
@@ -89,6 +93,10 @@ int main(int argc, char **argv) {
 				password_filename = strdup(optarg);
 			
 			break;
+		case 'S':
+			use_shake256 = 1;
+			hash_length_is_file_size = 1;
+			break;
 		case 's':
 			use_shake256 = 1;
 			break;
@@ -98,8 +106,20 @@ int main(int argc, char **argv) {
 		}
 	}
 	
-	if (use_shake256)
-		hash_length = hash_base * hash_factor;
+	if (use_shake256) {
+		if (hash_length_is_file_size) {
+			struct stat st;
+			if (stat(argv[argc-1], &st) < 0) {
+				printf("chest error: Cannot stat() '%s': %s\n",
+					argv[argc-1], strerror(errno));
+				exit(ECANCELED);
+			}
+			
+			hash_length = st.st_size;
+		}
+		else
+			hash_length = hash_base * hash_factor;
+	}
 	else
 		hash_length = SHA512_DIGEST_LENGTH;
 
