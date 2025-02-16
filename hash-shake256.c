@@ -39,7 +39,7 @@ char *HashShake256FromFile(char *filename) {
 	}
 	fclose(fp);
 
-	hash = malloc(hash_length);
+	char *hash = malloc(hash_length);
 	if (hash == NULL) {
 		printf("chest::HashShake256FromFile() error: malloc() returned NULL, exiting.\n");
 		exit(ENOMEM);
@@ -72,7 +72,7 @@ char *HashShake256FromFile(char *filename) {
 }
 
 char *HashShake256FromString(const char *pw) {
-	hash = malloc(hash_length);
+	char *hash = malloc(hash_length);
 	if (hash == NULL) {
 		printf("chest::HashShake256FromString() error: malloc() returned NULL, exiting.\n");
 		exit(ENOMEM);
