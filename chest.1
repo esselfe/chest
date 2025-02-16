@@ -1,10 +1,10 @@
 .\" Manpage for chest.
 .\" Contact esselfe16@gmail.com to correct errors or typos or open a pull request on Github.
-.TH man 1 "29 January 2025" "0.3.3" "chest man page"
+.TH man 1 "16 February 2025" "0.3.4" "chest man page"
 .SH NAME
 chest \- Encrypt or decrypt a file.
 .SH SYNOPSIS
-chest [befhpsV] FILENAME
+chest [befhpSsV] FILENAME
 .SH DESCRIPTION
 The chest program can be used to encrypt and decrypt files using a password
 hash (SHA512 with fixed length or SHAKE256 with variable length) hopping
@@ -30,6 +30,9 @@ Specify the hash length multiplier. This defaults to 1024.
 .TP
 -p, --password-file FILENAME
 Specify in which file to take data as password.
+.TP
+-S, --shake256-full-size
+Automatically use a shake256 hash length of the same size as the input file.
 .TP
 -s, --shake256
 Use the SHAKE256 hash function with variable hash size instead of the
