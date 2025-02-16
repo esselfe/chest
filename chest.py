@@ -14,6 +14,7 @@
 # I decided to include it in the project as a working Python variant of
 # the original C code written by me, esselfe (Stephane Fontaine).
 # Update 2025-01-21: I wrote the shake256 feature :)
+# Update 2025-02-16: I wrote the shake256-full-size feature :)
 import getpass
 import hashlib
 import os
@@ -22,6 +23,8 @@ import argparse
 
 default_extension = ".chest"
 use_shake256 = False
+shake256_is_full_size = False
+file_size = 0
 default_shake256_base_size = 1024
 default_shake256_factor = 1024
 shake256_base_size = default_shake256_base_size
@@ -33,9 +36,14 @@ def hash_sha512_password(password):
 	return sha512.digest()
 
 def hash_shake256_password(password):
+	global file_size, shake256_is_full_size
+	
 	shake = hashlib.shake_256()
 	shake.update(password.encode('utf-8'))
-	return shake.digest(shake256_base_size * shake256_factor)
+	if shake256_is_full_size:
+		return shake.digest(file_size)
+	else:
+		return shake.digest(shake256_base_size * shake256_factor)
 
 def process_file(file_path, password, mode, extension):
 	global use_shake256, shake256_base_size, shake256_factor
@@ -74,7 +82,7 @@ def process_file(file_path, password, mode, extension):
 	print(f"{'Encrypted' if mode == 'encrypt' else 'Decrypted'} file written to: {output_file_path}")
 
 def main():
-	global use_shake256, shake256_base_size, shake256_factor
+	global use_shake256, shake256_base_size, shake256_factor, shake256_is_full_size, file_size
 
 	parser = argparse.ArgumentParser(
 		description="Encrypt or decrypt a file using SHA-512 or SHAKE-256 hashed password."
@@ -86,6 +94,10 @@ def main():
 	)
 	parser.add_argument(
 		"-p", "--password-file", help="The file containing the password"
+	)
+	parser.add_argument(
+		"-S", "--shake256-full-size", action="store_true",
+		help="Generate SHAKE-256 digest of same size as the input file"
 	)
 	parser.add_argument(
 		"-s", "--shake256", action="store_true", 
@@ -101,11 +113,16 @@ def main():
 	)
 
 	args = parser.parse_args()
-
+	
 	use_shake256 = args.shake256
 	if use_shake256:
 		shake256_base_size = args.base if args.base else default_shake256_base_size
 		shake256_factor = args.factor if args.factor else default_shake256_factor
+
+	shake256_is_full_size = args.shake256_full_size
+	if shake256_is_full_size:
+		use_shake256 = True
+		file_size = os.path.getsize(args.filename)
 
 	if args.password_file:
 		try:
