@@ -18,7 +18,6 @@ unsigned int hash_factor = 1024; // base * factor = 1MB
 unsigned int hash_length;
 unsigned int hash_length_is_file_size; // bool
 unsigned int use_shake256;
-char *hash;
 
 const char *chest_default_extension = ".chest";
 const char *chest_extension;
