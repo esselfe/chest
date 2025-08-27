@@ -9,7 +9,7 @@
 
 #include "chest.h"
 
-static const char *chest_version = "0.3.4";
+static const char *chest_version = "0.3.5";
 
 int use_password_file;
 char *password_filename;
