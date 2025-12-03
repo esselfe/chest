@@ -14,7 +14,7 @@ static const char *chest_version = "0.3.5";
 int use_password_file;
 char *password_filename;
 unsigned int hash_base = 1024;
-unsigned int hash_factor = 1024; // base * factor = 1MB
+unsigned int hash_factor = 1024; // base * factor = 1MiB
 unsigned int hash_length;
 unsigned int hash_length_is_file_size; // bool
 unsigned int use_shake256;
