@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
 		if (hash_length_is_file_size) {
 			struct stat st;
 			if (stat(argv[argc-1], &st) < 0) {
-				printf("chest error: Cannot stat() '%s': %s\n",
+				printf("chest:main() error: Cannot stat() '%s': %s\n",
 					argv[argc-1], strerror(errno));
 				exit(ECANCELED);
 			}
@@ -136,7 +136,7 @@ int main(int argc, char **argv) {
 	char *filename_d;
 	int len = strlen(argv[argc-1]);
 	if (len < 1) {
-		printf("chest error: filename length can't be zero! Cancelled.\n");
+		printf("chest:main() error: filename length can't be zero! Cancelled.\n");
 		return ECANCELED;
 	}
 	if (len >= strlen(chest_extension) && 
@@ -144,14 +144,14 @@ int main(int argc, char **argv) {
 	    chest_extension) == 0) {
 		filename_s = (char *)malloc(len+1);
 		if (filename_s == NULL) {
-			printf("chest error: malloc() returned NULL, exiting.\n");
+			printf("chest:main() error: malloc() returned NULL, exiting.\n");
 			return 1;
 		}
 		sprintf(filename_s, "%s", argv[argc-1]);
 		filename_d = (char *)malloc(len-strlen(chest_extension));
 		if (filename_d == NULL) {
 			free(filename_s);
-			printf("chest error: malloc() returned NULL, exiting.\n");
+			printf("chest:main() error: malloc() returned NULL, exiting.\n");
 			return 1;
 		}
 		memset(filename_d, 0, len-strlen(chest_extension));
@@ -163,14 +163,14 @@ int main(int argc, char **argv) {
 	else {
 		filename_s = (char *)malloc(len+1);
 		if (filename_s == NULL) {
-			printf("chest error: malloc() returned NULL, exiting.\n");
+			printf("chest:main() error: malloc() returned NULL, exiting.\n");
 			return 1;
 		}
 		sprintf(filename_s, "%s", argv[argc-1]);
 		filename_d = (char *)malloc(len + strlen(chest_extension) + 1);
 		if (filename_d == NULL) {
 			free(filename_s);
-			printf("chest error: malloc() returned NULL, exiting.\n");
+			printf("chest:main() error: malloc() returned NULL, exiting.\n");
 			return 1;
 		}
 		sprintf(filename_d, "%s%s", argv[argc-1], chest_extension);

@@ -12,6 +12,7 @@ extern unsigned int use_shake256;
 void RemoveNewline(char *text);
 void Encrypt(char *src, char *dst);
 void Decrypt(char *src, char *dst);
+char *GetPassword(void);
 char *HashSHA512FromFile(char *filename);
 char *HashSHA512FromString(const char *pw);
 char *HashShake256FromFile(char *filename);

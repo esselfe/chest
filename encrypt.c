@@ -14,14 +14,14 @@ void Encrypt(char *src, char *dst) {
 	// Open input file
 	FILE *fr = fopen(src, "rb");
 	if (fr == NULL) {
-		fprintf(stderr, "chest error: Cannot open %s: %s\n", src, strerror(errno));
+		fprintf(stderr, "chest:Encrypt() error: Cannot open %s: %s\n", src, strerror(errno));
 		return;
 	}
 
 	// Open output file
 	FILE *fw = fopen(dst, "wb+");
 	if (fw == NULL) {
-		fprintf(stderr, "chest error: Cannot open %s: %s\n", dst, strerror(errno));
+		fprintf(stderr, "chest:Encrypt() error: Cannot open %s: %s\n", dst, strerror(errno));
 		fclose(fr);
 		return;
 	}
@@ -34,14 +34,11 @@ void Encrypt(char *src, char *dst) {
 			sum = HashSHA512FromFile(password_filename);
 	else {
 		// Ask for a password
-		char *pw = malloc(4096);
+		char *pw = GetPassword();
 		if (pw == NULL) {
-			printf("chest error: malloc() returned NULL, exiting.\n");
+			printf("chest:Encrypt() error: GetPassword() returned NULL, exiting.\n");
 			exit(1);
 		}
-		memset(pw, 0, 4096);
-		printf("New password: ");
-		fgets(pw, 4096, stdin);
 		RemoveNewline(pw);
 		
 		if (use_shake256)
@@ -54,12 +51,12 @@ void Encrypt(char *src, char *dst) {
 
 	char *buf = malloc(4096);
 	if (buf == NULL) {
-		printf("chest error: malloc() returned NULL, exiting.\n");
+		printf("chest:Encrypt() error: malloc() returned NULL, exiting.\n");
 		exit(1);
 	}
 	char *buf2 = malloc(4096);
 	if (buf2 == NULL) {
-		printf("chest error: malloc() returned NULL, exiting.\n");
+		printf("chest:Encrypt() error: malloc() returned NULL, exiting.\n");
 		exit(1);
 	}
 	int cnt = 0;
