@@ -7,7 +7,7 @@ CFLAGS = -std=c23 -Wall -O2 -D_DEFAULT_SOURCE
 LDFLAGS = -lcrypto
 
 OBJDIR = obj
-OBJS = $(OBJDIR)/decrypt.o $(OBJDIR)/encrypt.o \
+OBJS = $(OBJDIR)/decrypt.o $(OBJDIR)/encrypt.o $(OBJDIR)/get-password.o \
 $(OBJDIR)/hash-sha512.o $(OBJDIR)/hash-shake256.o \
 $(OBJDIR)/chest.o
 
@@ -38,6 +38,9 @@ $(OBJDIR)/decrypt.o: decrypt.c
 
 $(OBJDIR)/encrypt.o: encrypt.c
 	$(CC) -c $(CFLAGS) encrypt.c -o $(OBJDIR)/encrypt.o
+
+$(OBJDIR)/get-password.o: get-password.c
+	$(CC) -c $(CFLAGS) get-password.c -o $(OBJDIR)/get-password.o
 
 $(OBJDIR)/hash-sha512.o: hash-sha512.c
 	$(CC) -c $(CFLAGS) hash-sha512.c -o $(OBJDIR)/hash-sha512.o
