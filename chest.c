@@ -9,13 +9,15 @@
 
 #include "chest.h"
 
-static const char *chest_version = "0.3.7";
+static const char *chest_version_string = "0.3.7";
 
 struct ChestGlobals chest_globals;
 
-const char *chest_default_extension = ".chest";
+const char *chest_default_extension = CHEST_DEFAULT_EXTENSION;
 const char *chest_extension;
 
+// No program options needed if building the shared library.
+#ifndef BUILD_SHARED_LIB
 static struct option const long_options[] = {
 	{"help", no_argument, NULL, 'h'},
 	{"version", no_argument, NULL, 'V'},
@@ -28,12 +30,17 @@ static struct option const long_options[] = {
 	{NULL, 0, NULL, 0}
 };
 static char const *short_options = "hVb:e:f:p:Ss";
+#endif /* BUILD_SHARED_LIB */
 
 void ChestHelp(void) {
 	printf("Usage: chest { -h/--help | -V/--version |\n"
 	"    -s/--shake256 [ -b/--base BYTES | -f/--factor NUM ] |\n"
 	"    -S/--shake256-full-size |\n"
 	"    -e/--extension STRING | -p/--password-file FILENAME } FILENAME\n");
+}
+
+void ChestVersion(void) {
+	printf("chest %s\n", chest_version_string);
 }
 
 void ChestRemoveNewline(char *text) {
@@ -46,8 +53,10 @@ void ChestRemoveNewline(char *text) {
 	}
 }
 
+// No main() entrypoint needed if building the shared library.
+#ifndef BUILD_SHARED_LIB
 int main(int argc, char **argv) {
-	// Parse some of the program options here
+	// Parse some of the program options here.
 	while (1) {
 		int c = getopt_long(argc, argv, short_options, long_options, NULL);
 		if (c == -1) break;
@@ -57,7 +66,7 @@ int main(int argc, char **argv) {
 			ChestHelp();
 			exit(0);
 		case 'V':
-			printf("chest %s\n", chest_version);
+			ChestVersion();
 			exit(0);
 		case 'b':
 			if (optarg != NULL && strlen(optarg)) {
@@ -116,7 +125,7 @@ int main(int argc, char **argv) {
 	else
 		chest_globals.hash_length = SHA512_DIGEST_LENGTH;
 
-	// Must have at least 1 argument
+	// Must have at least 1 argument.
 	if (argc < 2) {
 		ChestHelp();
 		exit(EINVAL);
@@ -125,7 +134,7 @@ int main(int argc, char **argv) {
 	if (chest_extension == NULL)
 		chest_extension = chest_default_extension;
 
-	// Chech whether to encrypt or decrypt according to the file extension
+	// Chech whether to encrypt or decrypt according to the file extension.
 	char *filename_s;
 	char *filename_d;
 	int len = strlen(argv[argc-1]);
@@ -173,4 +182,5 @@ int main(int argc, char **argv) {
 
 	return 0;
 }
+#endif /* BUILD_SHARED_LIB */
 

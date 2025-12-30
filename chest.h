@@ -10,10 +10,12 @@ struct ChestGlobals {
 	unsigned int hash_length_is_file_size;
 	unsigned int use_shake256;
 };
-
-// Use for main() program entrypoint, for library clients, needs to be declared.
 extern struct ChestGlobals chest_globals;
 
+#define CHEST_DEFAULT_EXTENSION ".chest"
+
+void ChestHelp(void);
+void ChestVersion(void);
 void ChestRemoveNewline(char *text);
 void ChestEncrypt(char *src, char *dst);
 void ChestDecrypt(char *src, char *dst);
