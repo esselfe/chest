@@ -11,13 +11,7 @@
 
 static const char *chest_version = "0.3.7";
 
-int use_password_file;
-char *password_filename;
-unsigned int hash_base = 1024;
-unsigned int hash_factor = 1024; // base * factor = 1MiB
-unsigned int hash_length;
-unsigned int hash_length_is_file_size; // bool
-unsigned int use_shake256;
+struct ChestGlobals chest_globals;
 
 const char *chest_default_extension = ".chest";
 const char *chest_extension;
@@ -42,7 +36,7 @@ void ChestHelp(void) {
 	"    -e/--extension STRING | -p/--password-file FILENAME } FILENAME\n");
 }
 
-void RemoveNewline(char *text) {
+void ChestRemoveNewline(char *text) {
 	char *cp = text;
 	int len = strlen(text);
 	if (len < 1) return;
@@ -55,7 +49,7 @@ void RemoveNewline(char *text) {
 int main(int argc, char **argv) {
 	// Parse some of the program options here
 	while (1) {
-		int c = getopt_long( argc, argv, short_options, long_options, NULL);
+		int c = getopt_long(argc, argv, short_options, long_options, NULL);
 		if (c == -1) break;
 
 		switch (c) {
@@ -67,9 +61,9 @@ int main(int argc, char **argv) {
 			exit(0);
 		case 'b':
 			if (optarg != NULL && strlen(optarg)) {
-				hash_base = atoi(optarg);
-				if (hash_base == 0)
-					hash_base = 1024;
+				chest_globals.hash_base = atoi(optarg);
+				if (chest_globals.hash_base == 0)
+					chest_globals.hash_base = 1024;
 			}
 			
 			break;
@@ -80,24 +74,24 @@ int main(int argc, char **argv) {
 			break;
 		case 'f':
 			if (optarg != NULL && strlen(optarg)) {
-				hash_factor = atoi(optarg);
-				if (hash_factor == 0)
-					hash_factor = 1024;
+				chest_globals.hash_factor = atoi(optarg);
+				if (chest_globals.hash_factor == 0)
+					chest_globals.hash_factor = 1024;
 			}
 			
 			break;
 		case 'p':
-			use_password_file = 1;
+			chest_globals.use_password_file = 1;
 			if (optarg != NULL)
-				password_filename = strdup(optarg);
+				chest_globals.password_filename = strdup(optarg);
 			
 			break;
 		case 'S':
-			use_shake256 = 1;
-			hash_length_is_file_size = 1;
+			chest_globals.use_shake256 = 1;
+			chest_globals.hash_length_is_file_size = 1;
 			break;
 		case 's':
-			use_shake256 = 1;
+			chest_globals.use_shake256 = 1;
 			break;
 		default:
 			printf("chest warning: unknown option %d/'%c'\n", c, (char)c);
@@ -105,8 +99,8 @@ int main(int argc, char **argv) {
 		}
 	}
 	
-	if (use_shake256) {
-		if (hash_length_is_file_size) {
+	if (chest_globals.use_shake256) {
+		if (chest_globals.hash_length_is_file_size) {
 			struct stat st;
 			if (stat(argv[argc-1], &st) < 0) {
 				printf("chest:main() error: Cannot stat() '%s': %s\n",
@@ -114,13 +108,13 @@ int main(int argc, char **argv) {
 				exit(ECANCELED);
 			}
 			
-			hash_length = st.st_size;
+			chest_globals.hash_length = st.st_size;
 		}
 		else
-			hash_length = hash_base * hash_factor;
+			chest_globals.hash_length = chest_globals.hash_base * chest_globals.hash_factor;
 	}
 	else
-		hash_length = SHA512_DIGEST_LENGTH;
+		chest_globals.hash_length = SHA512_DIGEST_LENGTH;
 
 	// Must have at least 1 argument
 	if (argc < 2) {
@@ -158,7 +152,7 @@ int main(int argc, char **argv) {
 		for (int cnt = 0; cnt <= len-(strlen(chest_extension)+1); cnt++) {
 			filename_d[cnt] = argv[argc-1][cnt];
 		}
-		Decrypt(filename_s, filename_d);
+		ChestDecrypt(filename_s, filename_d);
 	}
 	else {
 		filename_s = (char *)malloc(len+1);
@@ -174,7 +168,7 @@ int main(int argc, char **argv) {
 			return 1;
 		}
 		sprintf(filename_d, "%s%s", argv[argc-1], chest_extension);
-		Encrypt(filename_s, filename_d);
+		ChestEncrypt(filename_s, filename_d);
 	}
 
 	return 0;

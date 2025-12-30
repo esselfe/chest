@@ -16,15 +16,15 @@ static void SaveInput(void) {
 	tcgetattr(STDIN_FILENO, &saved_attributes);
 }
 
-char *GetPassword(void) {
+char *ChestGetPassword(void) {
 	if (!isatty(STDIN_FILENO)) {
-		printf("chest:GetPassword() error: Not a TTY terminal.\n");
+		printf("ChestGetPassword() error: Not a TTY terminal.\n");
 		exit(ECANCELED);
 	}
 
 	char *pass = malloc(1000000);
 	if (pass == NULL) {
-		printf("chest:GetPassword() error: malloc() returned NULL!\n");
+		printf("ChestGetPassword() error: malloc() returned NULL!\n");
 		exit(ENOMEM);
 	}
 	memset(pass, 0, 1000000);
@@ -57,3 +57,4 @@ char *GetPassword(void) {
 
 	return pass;
 }
+

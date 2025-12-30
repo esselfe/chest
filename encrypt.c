@@ -7,56 +7,56 @@
 
 #include "chest.h"
 
-void Encrypt(char *src, char *dst) {
+void ChestEncrypt(char *src, char *dst) {
 	printf("src: %s\n", src);
 	printf("dst: %s\n", dst);
 
 	// Open input file
 	FILE *fr = fopen(src, "rb");
 	if (fr == NULL) {
-		fprintf(stderr, "chest:Encrypt() error: Cannot open %s: %s\n", src, strerror(errno));
+		fprintf(stderr, "ChestEncrypt() error: Cannot open %s: %s\n", src, strerror(errno));
 		return;
 	}
 
 	// Open output file
 	FILE *fw = fopen(dst, "wb+");
 	if (fw == NULL) {
-		fprintf(stderr, "chest:Encrypt() error: Cannot open %s: %s\n", dst, strerror(errno));
+		fprintf(stderr, "ChestEncrypt() error: Cannot open %s: %s\n", dst, strerror(errno));
 		fclose(fr);
 		return;
 	}
 
 	char *sum;
-	if (use_password_file)
-		if (use_shake256)
-			sum = HashShake256FromFile(password_filename);
+	if (chest_globals.use_password_file)
+		if (chest_globals.use_shake256)
+			sum = ChestHashShake256FromFile(chest_globals.password_filename);
 		else
-			sum = HashSHA512FromFile(password_filename);
+			sum = ChestHashSHA512FromFile(chest_globals.password_filename);
 	else {
 		// Ask for a password
-		char *pw = GetPassword();
+		char *pw = ChestGetPassword();
 		if (pw == NULL) {
-			printf("chest:Encrypt() error: GetPassword() returned NULL, exiting.\n");
+			printf("ChestEncrypt() error: ChestGetPassword() returned NULL, exiting.\n");
 			exit(1);
 		}
-		RemoveNewline(pw);
+		ChestRemoveNewline(pw);
 		
-		if (use_shake256)
-			sum = HashShake256FromString(pw);
+		if (chest_globals.use_shake256)
+			sum = ChestHashShake256FromString(pw);
 		else
-			sum = HashSHA512FromString(pw);
+			sum = ChestHashSHA512FromString(pw);
 	
 		free(pw);
 	}
 
 	char *buf = malloc(4096);
 	if (buf == NULL) {
-		printf("chest:Encrypt() error: malloc() returned NULL, exiting.\n");
+		printf("ChestEncrypt() error: malloc() returned NULL, exiting.\n");
 		exit(1);
 	}
 	char *buf2 = malloc(4096);
 	if (buf2 == NULL) {
-		printf("chest:Encrypt() error: malloc() returned NULL, exiting.\n");
+		printf("ChestEncrypt() error: malloc() returned NULL, exiting.\n");
 		exit(1);
 	}
 	int cnt = 0;
@@ -72,7 +72,7 @@ void Encrypt(char *src, char *dst) {
 
 			++cnt;
 			// Reset the hash index if the hash end has been reached
-			if (cnt >= hash_length)
+			if (cnt >= chest_globals.hash_length)
 				cnt = 0;
 		}
 
