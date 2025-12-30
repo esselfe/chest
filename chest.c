@@ -17,7 +17,7 @@ const char *chest_default_extension = CHEST_DEFAULT_EXTENSION;
 const char *chest_extension;
 
 // No program options needed if building the shared library.
-#ifndef BUILD_SHARED_LIB
+#ifndef BUILD_SHARED
 static struct option const long_options[] = {
 	{"help", no_argument, NULL, 'h'},
 	{"version", no_argument, NULL, 'V'},
@@ -30,7 +30,7 @@ static struct option const long_options[] = {
 	{NULL, 0, NULL, 0}
 };
 static char const *short_options = "hVb:e:f:p:Ss";
-#endif /* BUILD_SHARED_LIB */
+#endif /* BUILD_SHARED */
 
 void ChestHelp(void) {
 	printf("Usage: chest { -h/--help | -V/--version |\n"
@@ -54,7 +54,7 @@ void ChestRemoveNewline(char *text) {
 }
 
 // No main() entrypoint needed if building the shared library.
-#ifndef BUILD_SHARED_LIB
+#ifndef BUILD_SHARED
 int main(int argc, char **argv) {
 	// Parse some of the program options here.
 	while (1) {
@@ -182,5 +182,5 @@ int main(int argc, char **argv) {
 
 	return 0;
 }
-#endif /* BUILD_SHARED_LIB */
+#endif /* BUILD_SHARED */
 

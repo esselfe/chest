@@ -23,7 +23,7 @@ LIBNAME = libchest.so.1
 
 PREFIX ?= /usr/local
 
-.PHONY: default all shlib prepare go rust install-go install-rust install-python install clean
+.PHONY: default all shlib prepare go rust install-go install-rust install-python install-shlib install clean
 
 default: all
 
@@ -40,7 +40,7 @@ go:
 rust:
 	cargo build --release
 
-shlib: $(if $(USE_SHARED),$(LIBNAME))
+shlib: $(if $(BUILD_SHARED),$(LIBNAME))
 
 $(LIBNAME): $(OBJS_LIB)
 	$(CC) -shared $(OBJS_LIB) -o $(LIBNAME) $(LDFLAGS)
@@ -61,7 +61,7 @@ $(OBJDIR_SHARED)/hash-shake256.o: hash-shake256.c
 	$(CC) -c $(CFLAGS) -fPIC hash-shake256.c -o $(OBJDIR_SHARED)/hash-shake256.o
 
 $(OBJDIR_SHARED)/chest.o: chest.c
-	$(CC) -c $(CFLAGS) -DBUILD_SHARED_LIB=1 -fPIC chest.c -o $(OBJDIR_SHARED)/chest.o
+	$(CC) -c $(CFLAGS) -DBUILD_SHARED=1 -fPIC chest.c -o $(OBJDIR_SHARED)/chest.o
 
 $(OBJDIR)/decrypt.o: decrypt.c
 	$(CC) -c $(CFLAGS) decrypt.c -o $(OBJDIR)/decrypt.o
@@ -93,11 +93,15 @@ install-rust:
 install-python:
 	@install -Dvm 0755 chest.py $(PREFIX)/bin/
 
-install: $(if $(USE_GO),install-go) $(if $(USE_RUST),install-rust) $(if $(USE_PYTHON),install-python)
+install-shlib:
+	@[ -f "$(LIBNAME)" ] && { install -Dvm 0755 $(LIBNAME) $(PREFIX)/lib/ && ldconfig; }
+
+install: $(if $(USE_GO),install-go) $(if $(USE_RUST),install-rust) \
+$(if $(USE_PYTHON),install-python) $(if $(BUILD_SHARED),install-shlib)
 	install -Dvm 0755 $(PROGNAME) $(PREFIX)/bin/
 	install -Dvm 0644 chest.1 $(PREFIX)/share/man/man1/
 	gzip -9 $(PREFIX)/share/man/man1/chest.1
 
 clean:
-	@rm -rfv target $(OBJDIR_SHARED) $(LIBNAME) $(OBJDIR) $(PROGNAME) $(PROGNAME_GO) || true
+	@rm -rfv target $(OBJDIR_SHARED) $(LIBNAME) $(OBJDIR) $(PROGNAME) $(PROGNAME_GO) 2>/dev/null || true
 
