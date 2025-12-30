@@ -94,7 +94,8 @@ install-python:
 	@install -Dvm 0755 chest.py $(PREFIX)/bin/
 
 install-shlib:
-	@[ -f "$(LIBNAME)" ] && { install -Dvm 0755 $(LIBNAME) $(PREFIX)/lib/ && ldconfig; }
+	@[ -f "$(LIBNAME)" ] && { install -Dvm 0755 $(LIBNAME) $(PREFIX)/lib/ && \
+	install -Dvm 0644 chest.h $(PREFIX)/include/ && ldconfig; }
 
 install: $(if $(USE_GO),install-go) $(if $(USE_RUST),install-rust) \
 $(if $(USE_PYTHON),install-python) $(if $(BUILD_SHARED),install-shlib)
