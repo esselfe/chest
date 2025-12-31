@@ -1,5 +1,5 @@
 ![chest logo](chest-128.png)  
-Updated: 250130  
+Updated: 251231  
   
 The chest program can be used to encrypt and decrypt files using a password  
 hash hopping algorithm (SHA512 with fixed length or SHAKE256 with variable  
@@ -31,6 +31,12 @@ the 'make install' command.
 If you want to build and install the Go version, add "USE_GO=1" to the  
 'make' commands. The Python and Rust versions can also be built and  
 installed this way, with the "USE_PYTHON=1" and "USE_RUST=1" options.  
+
+If you want to use the chest functions into another project, add  
+"BUILD_SHARED=1" to the make commands. This generate and install the  
+shared library and development header which you can include in your  
+source code. Note that you need to initialize the 'struct ChestGlobals'  
+variables one by one.  
   
 DISCLAIMER  
 There is no warranty that the encrypted output file is not  
